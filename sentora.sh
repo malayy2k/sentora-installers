@@ -1229,7 +1229,7 @@ if [[ "$OS" = "CentOs" || "$OS" = "Fedora" ]]; then
     PHP_EXT_PATH="/etc/php.d"
 elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
 	if [[ "$VER" == "16.04" ]]; then
-		$PACKAGE_INSTALLER php5.6 libapache2-mod-php5.6 php5.6-mcrypt php5.6-mbstring php5.6-curl php5.6-cli php5.6-mysql php5.6-gd php5.6-intl php5.6-xsl php5.6-soap php5.6-dom php5.6-json php5.6-common php5.6-readline php5.6-dev php5.6-zip
+		$PACKAGE_INSTALLER php php-dev php-mysql libapache2-mod-php php-common php-cli php-mysql php-gd php-mcrypt php-curl php-pear php-imap php-xmlrpc php7.0-xml php-intl php-mbstring mcrypt
 	else
 		$PACKAGE_INSTALLER libapache2-mod-php5 php5-common php5-cli php5-mysql php5-gd php5-mcrypt php5-curl php-pear php5-imap php5-xmlrpc php5-xsl php5-intl
 	fi
@@ -1239,9 +1239,9 @@ elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
         $PACKAGE_INSTALLER php5-suhosin
     fi
 	if [[ "$VER" == "16.04" ]]; then
-		PHP_INI_PATH="/etc/php/5.6/apache2/php.ini"
-		PHP_EXT_PATH="/etc/php/5.6/mods-available/"
-		PHP_EXT_LINK="/etc/php/5.6/apache2/conf.d"
+		PHP_INI_PATH="/etc/php/7.0/apache2/php.ini"
+		PHP_EXT_PATH="/etc/php/7.0/mods-available/"
+		PHP_EXT_LINK="/etc/php/7.0/apache2/conf.d"
 	else
 		PHP_INI_PATH="/etc/php5/apache2/php.ini"
 	fi
@@ -1285,11 +1285,11 @@ sed -i "s|expose_php = On|expose_php = Off|" $PHP_INI_PATH
 if [[ "$OS" = "CentOs" || "$OS" = "Fedora" || "$OS" = "debian" || ( "$OS" = "Ubuntu" && "$VER" != "12.04") ]] ; then
     echo -e "\n# Building suhosin"
     if [[ ("$OS" = "Ubuntu" && "$VER" != "16.04") || "$OS" = "debian" ]]; then
-        $PACKAGE_INSTALLER php5.6-dev
+        $PACKAGE_INSTALLER php5-dev
     fi
 
 	while true; do
-	if [[ "$(versioncheck "$phpver")" < "$(versioncheck "5.6")" ]]; then
+	if [[ "$(versioncheck "$phpver")" < "$(versioncheck "7.0.0")" ]]; then
 		read -e -p "Do you want to install Suhosin from the Sentora (O)riginal version or the (l)ast stable version? (O/L)" suh
 	else
 		echo -e "-- Your current php Version installed is $phpver."
@@ -1318,7 +1318,7 @@ if [[ "$OS" = "CentOs" || "$OS" = "Fedora" || "$OS" = "debian" || ( "$OS" = "Ubu
     rm -f suhosin.zip
 	
     if [[ "$SUHOSIN_VERSION" = "master" ]]; then
-		cd suhosin-$SUHOSIN_VERSION
+		cd suhosin7-$SUHOSIN_VERSION
 	else
 		cd suhosin-$SUHOSIN_VERSION
     fi
@@ -1328,20 +1328,20 @@ if [[ "$OS" = "CentOs" || "$OS" = "Fedora" || "$OS" = "debian" || ( "$OS" = "Ubu
     make install 
     cd ..
 	if [[ "$SUHOSIN_VERSION" = "master" ]]; then
-		rm -rf suhosin-$SUHOSIN_VERSION
+		rm -rf suhosin7-$SUHOSIN_VERSION
 	else
 		rm -rf suhosin-$SUHOSIN_VERSION
     fi
    
     if [[ "$OS" = "CentOs" || "$OS" = "Fedora" ]]; then 
 		if [[ "$SUHOSIN_VERSION" = "master" ]]; then
-			echo 'extension=suhosin.so' > $PHP_EXT_PATH/suhosin.ini
+			echo 'extension=suhosin7.so' > $PHP_EXT_PATH/suhosin.ini
 		else
 			echo 'extension=suhosin.so' > $PHP_EXT_PATH/suhosin.ini
 		fi 
     elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
 		if [[ "$SUHOSIN_VERSION" = "master" ]]; then
-			sed -i 'N;/default extension directory./a\extension=suhosin.so' $PHP_INI_PATH
+			sed -i 'N;/default extension directory./a\extension=suhosin7.so' $PHP_INI_PATH
 		else
 			sed -i 'N;/default extension directory./a\extension=suhosin.so' $PHP_INI_PATH
 		fi
