@@ -74,7 +74,7 @@ ARCH=$(uname -m)
 echo "Detected : $OS  $VER  $ARCH"
 
 if [[ "$OS" = "CentOs" && ( "$VER" = "8" ) || 
-      "$OS" = "Ubuntu" && ( "$VER" = "18.04" || "$VER" = "20.04" ) ||
+      "$OS" = "Ubuntu" && ( "$VER" = "16.04" || "$VER" = "18.04" || "$VER" = "20.04" ) ||
       "$OS" = "debian" && ( "$VER" = "9" || "$VER" = "10" ) ]] ; then
     echo "Ok."
 else
@@ -639,8 +639,9 @@ echo -e "\n-- Downloading Sentora, Please wait, this may take several minutes, t
 while true; do
 
 	# Sentora REPO
-    # wget -nv -O sentora_core.zip https://github.com/sentora/sentora-core/archive/$SENTORA_CORE_VERSION.zip
-	wget -nv -O sentora_core.zip https://github.com/Dukecitysolutions/sentora-core-dev/archive/master.zip
+        wget -nv -O sentora_core.zip https://github.com/sentora/sentora-core/archive/$SENTORA_CORE_VERSION.zip
+      # wget -nv -O sentora_core.zip https://github.com/Dukecitysolutions/sentora-core-dev/archive/master.zip
+	
 	
     if [[ -f sentora_core.zip ]]; then
         break;
@@ -792,8 +793,8 @@ ln -s $PANEL_PATH/panel/bin/setzadmin /usr/bin/setzadmin
 while true; do
 
 	# Sentora REPO
-    # wget -nv -O sentora_preconfig.zip https://github.com/sentora/sentora-installers/archive/$SENTORA_INSTALLER_VERSION.zip
-	wget -nv -O sentora_preconfig.zip https://github.com/Dukecitysolutions/sentora-installers-dev/archive/master.zip
+      wget -nv -O sentora_preconfig.zip https://github.com/sentora/sentora-installers/archive/$SENTORA_INSTALLER_VERSION.zip
+    # wget -nv -O sentora_preconfig.zip https://github.com/Dukecitysolutions/sentora-installers-dev/archive/master.zip
 	
     if [[ -f sentora_preconfig.zip ]]; then
         break;
@@ -1223,20 +1224,20 @@ echo -e "\n-- Installing and configuring PHP"
 
 if [[ $1 = PHP* ]]; then
 
-	if [[ $1 = "PHP73" ]]; then
-		echo -e "\n-Installing PHP 7.3..."
+	if [[ $1 = "PHP5.6" ]]; then
+		echo -e "\n-Installing PHP 5.6..."
 
-		# Install PHP 7.3 version
-        # Start PHP 7.3 & tools install here
+		# Install PHP 5.6 version
+        # Start PHP 5.6 & tools install here
             
-        # Install PHP 7.3 & Repos
+        # Install PHP 5.6 & Repos
         if [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
             if [[ "$VER" = "14.04" || "$VER" = "8" ]]; then
             
                 $PACKAGE_INSTALLER libapache2-mod-php5 php5-common php5-cli php5-mysql php5-gd php5-mcrypt php5-curl php-pear php5-imap php5-xmlrpc php5-xsl php5-intl
         
             elif [[ "$VER" = "16.04" || "$VER" = "18.04" || "$VER" = "20.04" ]]; then
-                # Install PHP 7.3 Repos & enable
+                # Install PHP 5.6 Repos & enable
                 $PACKAGE_INSTALLER software-properties-common
                 add-apt-repository -y ppa:ondrej/apache2
                 add-apt-repository -y ppa:ondrej/php
@@ -1247,37 +1248,32 @@ if [[ $1 = PHP* ]]; then
 				$PACKAGE_REMOVER php7.*
 				apt-get purge php7.*
                 
-                # Install PHP 7.3 and install modules
-                $PACKAGE_INSTALLER install php7.3 php7.3-common 
-                $PACKAGE_INSTALLER php7.3-mysql php7.3-mbstring
-                $PACKAGE_INSTALLER php7.3-zip php7.3-xml php7.3-gd
-                $PACKAGE_INSTALLER php7.0-dev libapache2-mod-php7.3
-                $PACKAGE_INSTALLER php7.3-dev
-                $PACKAGE_INSTALLER php7.3-curl
+                # Install PHP 5.6 and install modules
+                $PACKAGE_INSTALLER php5.6 libapache2-mod-php5.6 php5.6-mcrypt php5.6-mbstring php5.6-curl php5.6-cli php5.6-mysql php5.6-gd php5.6-intl php5.6-xsl php5.6-soap php5.6-dom php5.6-json php5.6-common php5.6-readline php5.6-dev php5.6-zip
                 
                 # PHP Mcrypt 1.0.2 install
-                if [ ! -f /etc/php/7.3/apache2/conf.d/20-mcrypt.ini ]
+                if [ ! -f /etc/php/5.6/apache2/conf.d/20-mcrypt.ini ]
                         then
                     echo -e "\nInstalling php mcrypt 1.0.2"
                     $PACKAGE_INSTALLER gcc make autoconf libc-dev pkg-config
                     $PACKAGE_INSTALLER libmcrypt-dev
                     echo '' | sudo pecl install mcrypt-1.0.2
-                    bash -c "echo extension=mcrypt.so > /etc/php/7.3/mods-available/mcrypt.ini"
-                    ln -s /etc/php/7.3/mods-available/mcrypt.ini /etc/php/7.3/apache2/conf.d/20-mcrypt.ini
+                    bash -c "echo extension=mcrypt.so > /etc/php/5.6/mods-available/mcrypt.ini"
+                    ln -s /etc/php/5.6/mods-available/mcrypt.ini /etc/php/5.6/apache2/conf.d/20-mcrypt.ini
                 fi		
                 
-                # Set PHP 7.3 as system default in case upgrade to PHP 7.4+
-                update-alternatives --set php /usr/bin/php7.3
+                # Set PHP 5.6 as system default in case upgrade to PHP 7.4+
+                update-alternatives --set php /usr/bin/php5.6
                 
-                # Enable Apache mod_php7.3
-                a2enmod php7.3  
+                # Enable Apache mod_php5.6
+                a2enmod php5.6  
                       
             # elif [[ "$VER" = "8" || "$VER" = "9" ]]; then
                 # Adding Support Soon!!!
                 # Enter code here
             fi 
             
-            PHP_INI_PATH="/etc/php/7.3/apache2/php.ini"
+            PHP_INI_PATH="/etc/php/5.6/apache2/php.ini"
             
         elif [[ "$OS" = "CentOs" ]]; then
         
@@ -1406,7 +1402,7 @@ else
 		elif [[ "$VER" = "18.04" ]]; then
 			PHP_INI_PATH="/etc/php/7.2/apache2/php.ini"
 		elif [[ "$VER" = "20.04" ]]; then
-			PHP_INI_PATH="/etc/php/7.4/apache2/php.ini"	
+			PHP_INI_PATH="/etc/php/5.6/apache2/php.ini"	
 		fi		
 	fi
 	
@@ -1461,11 +1457,11 @@ else
 					
 			# Create php-mcrypt modules file
 			touch /etc/php/7.4/mods-available/mcrypt.ini
-			echo 'extension=mcrypt.so' >> /etc/php/7.4/mods-available/mcrypt.ini
+			echo 'extension=mcrypt.so' >> /etc/php/5.6/mods-available/mcrypt.ini
 						
 			# Create links to activate PHP-mcrypt
-			ln -s /etc/php/7.4/mods-available/mcrypt.ini /etc/php/7.4/apache2/conf.d/20-mcrypt.ini
-			ln -s /etc/php/7.4/mods-available/mcrypt.ini /etc/php/7.4/cli/conf.d/20-mcrypt.ini
+			ln -s /etc/php/5.6/mods-available/mcrypt.ini /etc/php/5.6/apache2/conf.d/20-mcrypt.ini
+			ln -s /etc/php/5.6/mods-available/mcrypt.ini /etc/php/5.6/cli/conf.d/20-mcrypt.ini
 					
 		fi	
 	fi
@@ -1510,16 +1506,16 @@ sed -i 's|expose_php = On|expose_php = Off|g' $PHP_INI_PATH
 
 if [[ "$VER" = "16.04" || "$VER" = "18.04" || "$VER" = "20.04" || "$VER" = "7" || "$VER" = "8" ]]; then
 
-	##### Check php 7.x was installed or quit installer.
+	##### Check php 5.x was installed or quit installer.
 	PHPVERFULL=$(php -r 'echo phpversion();')
 	PHPVER=${PHPVERFULL:0:3} # return 5.x or 7.x
 	
 	echo -e "\nDetected PHP: $PHPVER "
 
-	if  [[ "$PHPVER" == 7.* ]]; then
+	if  [[ "$PHPVER" == 5.* ]]; then
 		echo -e "\nPHP $PHPVER installed. Procced installing ..."
 	else
-		echo -e "\nPHP 7.x not installed. $PHPVER installed. Exiting installer. Please contact script admin"
+		echo -e "\nPHP 5.x not installed. $PHPVER installed. Exiting installer. Please contact script admin"
 		exit 1
 	fi
 
