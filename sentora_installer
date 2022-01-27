@@ -1224,7 +1224,7 @@ echo -e "\n-- Installing and configuring PHP"
 
 if [[ $1 = PHP* ]]; then
 
-	if [[ $1 = "PHP5.6" ]]; then
+	if [[ $1 = "PHP56" ]]; then
 		echo -e "\n-Installing PHP 5.6..."
 
 		# Install PHP 5.6 version
@@ -1239,6 +1239,7 @@ if [[ $1 = PHP* ]]; then
             elif [[ "$VER" = "16.04" || "$VER" = "18.04" || "$VER" = "20.04" ]]; then
                 # Install PHP 5.6 Repos & enable
                 $PACKAGE_INSTALLER software-properties-common
+		$PACKAGE_INSTALLER python-software-properties
                 add-apt-repository -y ppa:ondrej/apache2
                 add-apt-repository -y ppa:ondrej/php
                 apt-get -yqq update
@@ -1382,7 +1383,7 @@ else
 			
 		elif [[ "$VER" = "16.04" || "$VER" = "18.04" || "$VER" = "20.04" ]]; then	
 		
-			$PACKAGE_INSTALLER libapache2-mod-php php-common php-bcmath php-cli php-mysql php-gd php-curl php-pear php-imagick php-imap php-xmlrpc php-xsl php-intl php-mbstring php-dev php-zip	
+			$PACKAGE_INSTALLER php5.6 libapache2-mod-php5.6 php5.6-mcrypt php5.6-mbstring php5.6-curl php5.6-cli php5.6-mysql php5.6-gd php5.6-intl php5.6-xsl php5.6-soap php5.6-dom php5.6-json php5.6-common php5.6-readline php5.6-dev php5.6-zip	
 			
             # Get PHP mcrypt files
             if [[ "$VER" = "16.04" ]]; then
@@ -1456,7 +1457,7 @@ else
 		elif [[ "$VER" = "20.04" ]]; then
 					
 			# Create php-mcrypt modules file
-			touch /etc/php/7.4/mods-available/mcrypt.ini
+			touch /etc/php/5.6/mods-available/mcrypt.ini
 			echo 'extension=mcrypt.so' >> /etc/php/5.6/mods-available/mcrypt.ini
 						
 			# Create links to activate PHP-mcrypt
@@ -1523,56 +1524,56 @@ if [[ "$VER" = "16.04" || "$VER" = "18.04" || "$VER" = "20.04" || "$VER" = "7" |
 # Start Snuffleupagus v.0.5.x install Below
 # -------------------------------------------------------------------------------
 	
-	echo -e "\n-- Installing and configuring Snuffleupagus..."
+	# echo -e "\n-- Installing and configuring Snuffleupagus..."
 	
 	# Install Snuffleupagus
 	# Install git
-	$PACKAGE_INSTALLER git
+	# $PACKAGE_INSTALLER git
 	
 	#setup PHP_PERDIR in Snuffleupagus.c in src
-	mkdir -p /etc/snuffleupagus
-	cd /etc || exit
+	# mkdir -p /etc/snuffleupagus
+	# cd /etc || exit
 	
 	# Clone Snuffleupagus
-	git clone https://github.com/nbs-system/snuffleupagus
+	# git clone https://github.com/nbs-system/snuffleupagus
 	
-	cd /etc/snuffleupagus/src || exit
+	# cd /etc/snuffleupagus/src || exit
 		
-	sed -i 's|PHP_INI_SYSTEM|PHP_INI_PERDIR|g' snuffleupagus.c
+	# sed -i 's|PHP_INI_SYSTEM|PHP_INI_PERDIR|g' snuffleupagus.c
 	
 	# Update PCRE for CentOs 8 - Fix issue with building Snuffleupagus
-	if [[ "$OS" = "CentOs" && (  "$VER" = "8" ) ]]; then
-		$PACKAGE_INSTALLER pcre-devel
-	elif [[ "$OS" = "Ubuntu" && (  "$VER" = "20.04" ) ]]; then
-		$PACKAGE_INSTALLER libpcre3 libpcre3-dev
-	fi
+	# if [[ "$OS" = "CentOs" && (  "$VER" = "8" ) ]]; then
+		# $PACKAGE_INSTALLER pcre-devel
+	# elif [[ "$OS" = "Ubuntu" && (  "$VER" = "20.04" ) ]]; then
+		# $PACKAGE_INSTALLER libpcre3 libpcre3-dev
+	# fi
 	
 	# Build Snuffleupagus
-	phpize
-	./configure --enable-snuffleupagus
-	make clean
-	make
-	make install
+	# phpize
+	# ./configure --enable-snuffleupagus
+	# make clean
+	# make
+	# make install
 	
-	cd ~ || exit
+	# cd ~ || exit
 		
-	if [[ "$OS" = "CentOs" && (  "$VER" = "7" || "$VER" = "8" ) ]]; then
-	
-		# Enable snuffleupagus in PHP.ini
-		echo -e "\nUpdating CentOS PHP.ini Enable snuffleupagus..."
-		echo "extension=snuffleupagus.so" >> /etc/php.d/20-snuffleupagus.ini
-		echo "sp.configuration_file=/etc/sentora/configs/php/sp/snuffleupagus.rules" >> /etc/php.d/20-snuffleupagus.ini
-		
-    elif [[ "$OS" = "Ubuntu" && ( "$VER" = "16.04" || "$VER" = "18.04" || "$VER" = "20.04") ]]; then
+	# if [[ "$OS" = "CentOs" && (  "$VER" = "7" || "$VER" = "8" ) ]]; then
 	
 		# Enable snuffleupagus in PHP.ini
-		echo -e "\nUpdating Ubuntu PHP.ini Enable snuffleupagus..."
-		echo "extension=snuffleupagus.so" >> /etc/php/"$PHPVER"/mods-available/snuffleupagus.ini
-		echo "sp.configuration_file=/etc/sentora/configs/php/sp/snuffleupagus.rules" >> /etc/php/"$PHPVER"/mods-available/snuffleupagus.ini
-		ln -s /etc/php/"$PHPVER"/mods-available/snuffleupagus.ini /etc/php/"$PHPVER"/apache2/conf.d/20-snuffleupagus.ini
+		# echo -e "\nUpdating CentOS PHP.ini Enable snuffleupagus..."
+		# echo "extension=snuffleupagus.so" >> /etc/php.d/20-snuffleupagus.ini
+		# echo "sp.configuration_file=/etc/sentora/configs/php/sp/snuffleupagus.rules" >> /etc/php.d/20-snuffleupagus.ini
 		
-	fi
-fi	
+    # elif [[ "$OS" = "Ubuntu" && ( "$VER" = "16.04" || "$VER" = "18.04" || "$VER" = "20.04") ]]; then
+	
+		# Enable snuffleupagus in PHP.ini
+		# echo -e "\nUpdating Ubuntu PHP.ini Enable snuffleupagus..."
+		# echo "extension=snuffleupagus.so" >> /etc/php/"$PHPVER"/mods-available/snuffleupagus.ini
+		# echo "sp.configuration_file=/etc/sentora/configs/php/sp/snuffleupagus.rules" >> /etc/php/"$PHPVER"/mods-available/snuffleupagus.ini
+		# ln -s /etc/php/"$PHPVER"/mods-available/snuffleupagus.ini /etc/php/"$PHPVER"/apache2/conf.d/20-snuffleupagus.ini
+		
+	# fi
+# fi	
 
 # Register apache(+php) service for autostart and start it
 if [[ "$OS" = "CentOs" ]]; then
