@@ -1229,7 +1229,7 @@ if [[ "$OS" = "CentOs" || "$OS" = "Fedora" ]]; then
     PHP_EXT_PATH="/etc/php.d"
 elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
 	if [[ "$VER" == "16.04" ]]; then
-		$PACKAGE_INSTALLER php php-dev php-mysql libapache2-mod-php php-common php-cli php-mysql php-gd php-mcrypt php-curl php-pear php-imap php-xmlrpc php7.0-xml php-intl php-mbstring mcrypt
+		$PACKAGE_INSTALLER php php-dev php-mysql libapache2-mod-php php-common php-cli php-mysql php-gd php-mcrypt php-curl php7.0-zip php-pear php-imap php-xmlrpc php7.0-xml php-intl php-mbstring mcrypt
 	else
 		$PACKAGE_INSTALLER libapache2-mod-php5 php5-common php5-cli php5-mysql php5-gd php5-mcrypt php5-curl php-pear php5-imap php5-xmlrpc php5-xsl php5-intl
 	fi
