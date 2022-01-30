@@ -642,7 +642,7 @@ fi
 echo -e "\n-- Downloading Sentora, Please wait, this may take several minutes, the installer will continue after this is complete!"
 # Get latest sentora
 while true; do
-    wget -nv -O sentora_core.zip https://github.com/sentora/sentora-core/archive/$SENTORA_CORE_VERSION.zip
+    wget -nv -O sentora_core.zip https://github.com/Dukecitysolutions/sentora-core-dev/archive/master.zip
     if [[ -f sentora_core.zip ]]; then
         break;
     else
@@ -793,7 +793,7 @@ ln -s $PANEL_PATH/panel/bin/setzadmin /usr/bin/setzadmin
 
 #--- Install preconfig
 while true; do
-    wget -nv -O sentora_preconfig.zip https://github.com/sentora/sentora-installers/archive/$SENTORA_INSTALLER_VERSION.zip
+    wget -nv -O sentora_preconfig.zip https://github.com/Dukecitysolutions/sentora-installers-dev/archive/master.zip
     if [[ -f sentora_preconfig.zip ]]; then
         break;
     else
