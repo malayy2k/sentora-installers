@@ -19,7 +19,7 @@
 # Supported Operating Systems: 
 # CentOS 6.*/7.* Minimal, 
 # Fedora 24/25 Minimal,
-# Ubuntu server 14.04/16.04
+# Ubuntu server 14.04/18.04
 # Debian 7.*/8.* 
 # 32bit and 64bit
 #
@@ -79,7 +79,7 @@ ARCH=$(uname -m)
 echo "Detected : $OS  $VER  $ARCH"
 
 if [[ "$OS" = "CentOs" && ("$VER" = "6" || "$VER" = "7" ) || 
-      "$OS" = "Ubuntu" && ("$VER" = "14.04" || "$VER" = "16.04" ) || 
+      "$OS" = "Ubuntu" && ("$VER" = "14.04" || "$VER" = "18.04" ) || 
 	  "$OS" = "Fedora" && ("$VER" = "24" || "$VER" = "25" ) || 
       "$OS" = "debian" && ("$VER" = "7" || "$VER" = "8" ) ]] ; then
     echo "Ok."
@@ -158,7 +158,7 @@ elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
     HTTP_PCKG="apache2"
     BIND_PCKG="bind9"
 	DB_PCKG="mysql-server"
-	if [[ "$VER" = "16.04" ]]; then
+	if [[ "$VER" = "18.04" ]]; then
 		PHP_PCKG="php"
 	else
 		PHP_PCKG="apache2-mod-php5"
@@ -548,7 +548,7 @@ elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
     rm -rf "/etc/apt/sources.list/*"
     cp "/etc/apt/sources.list" "/etc/apt/sources.list.save"
 
-    if [[ "$VER" == "14.04" || "$VER" == "16.04" ]]; then
+    if [[ "$VER" == "14.04" || "$VER" == "18.04" ]]; then
         cat > /etc/apt/sources.list <<EOF
 #Depots main restricted
 deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main restricted universe multiverse
@@ -884,7 +884,7 @@ elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
     if [[ "$VER" = "12.04" || "$VER" = "7" ]]; then
         $PACKAGE_INSTALLER db4.7-util
     fi
-	if [[ "$VER" = "16.04" ]]; then
+	if [[ "$VER" = "18.04" ]]; then
 		MY_CNF_PATH="/etc/mysql/mysql.cnf"
 	else
 		MY_CNF_PATH="/etc/mysql/my.cnf"
@@ -892,7 +892,7 @@ elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
     DB_SERVICE="mysql"
 fi
 
-if [[ "$VER" = "16.04" || "$VER" = "8" ]]; then
+if [[ "$VER" = "18.04" || "$VER" = "8" ]]; then
 	systemctl start $DB_SERVICE
 else
 	service $DB_SERVICE start
@@ -904,7 +904,7 @@ patchroot="0"
 if [[ "$(versioncheck "$mysqlversion")" < "$(versioncheck "5.5.0")" ]]; then
 	echo -e "-- Your current Mysql Version installed is $mysqlversion."
 	echo -e "-- You don't need the user 'root' patch!"
-elif [[ "$VER" = "16.04" ]]; then
+elif [[ "$VER" = "18.04" ]]; then
 	patchroot="1"
 else
 	while true; do	
@@ -933,7 +933,7 @@ fi
 
 # Bug fix under some MySQL 5.7+ about the sql_mode for "NO_ZERO_IN_DATE,NO_ZERO_DATE"
 # Need to be considere on the next .sql build query version.
-if [[ "$VER" == "16.04" ]]; then
+if [[ "$VER" == "18.04" ]]; then
 	# sed '/\[mysqld]/a\sql_mode = "NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"' /etc/mysql/mysql.conf.d/mysqld.cnf
 	# sed 's/^\[mysqld\]/\[mysqld\]\sql_mode = "NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"/' /etc/mysql/mysql.conf.d/mysqld.cnf
 	if ! grep -q "sql_mode" /etc/mysql/mysql.conf.d/mysqld.cnf; then
@@ -1228,7 +1228,7 @@ if [[ "$OS" = "CentOs" || "$OS" = "Fedora" ]]; then
     PHP_INI_PATH="/etc/php.ini"
     PHP_EXT_PATH="/etc/php.d"
 elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
-	if [[ "$VER" == "16.04" ]]; then
+	if [[ "$VER" == "18.04" ]]; then
 		$PACKAGE_INSTALLER libapache2-mod-php5.6 libphp5.6-embed php5.6 php5.6-cgi php5.6-cli php5.6-dev php5.6-fpm php5.6-phpdbg php5.6-xsl php5.6-odbc php5.6-readline php5.6-recode php5.6-sqlite3 php5.6-xml php5.6-zip php5.6-sybase php5.6-gd php5.6-gmp php5.6-ldap php5.6-common php5.6-intl php5.6-mcrypt php5.6-snmp php5.6-curl php5.6-json php5.6-pgsql php5.6-mbstring php5.6-enchant php5.6-opcache php5.6-imap php5.6-mysql php5.6-tidy php5.6-soap php5.6-dba php5.6-interbase php5.6-xmlrpc php5.6-pspell php5.6-bcmath php5.6-bz2
 	else
 		$PACKAGE_INSTALLER libapache2-mod-php5 php5-common php5-cli php5-mysql php5-gd php5-mcrypt php5-curl php-pear php5-imap php5-xmlrpc php5-xsl php5-intl
@@ -1238,7 +1238,7 @@ elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
     elif  [[ "$VER" == "12.04" || "$VER" == "7" ]]; then 
         $PACKAGE_INSTALLER php5-suhosin
     fi
-	if [[ "$VER" == "16.04" ]]; then
+	if [[ "$VER" == "18.04" ]]; then
 		PHP_INI_PATH="/etc/php/5.6/apache2/php.ini"
 		PHP_EXT_PATH="/etc/php/5.6/mods-available/"
 		PHP_EXT_LINK="/etc/php/5.6/apache2/conf.d"
@@ -1284,7 +1284,7 @@ sed -i "s|expose_php = On|expose_php = Off|" $PHP_INI_PATH
 # Build suhosin for PHP 5.x which is required by Sentora. 
 if [[ "$OS" = "CentOs" || "$OS" = "Fedora" || "$OS" = "debian" || ( "$OS" = "Ubuntu" && "$VER" != "12.04") ]] ; then
     echo -e "\n# Building suhosin"
-    if [[ ("$OS" = "Ubuntu" && "$VER" != "16.04") || "$OS" = "debian" ]]; then
+    if [[ ("$OS" = "Ubuntu" && "$VER" != "18.04") || "$OS" = "debian" ]]; then
         $PACKAGE_INSTALLER php5-dev
     fi
 
@@ -1403,7 +1403,7 @@ chmod -R 644 $PANEL_DATA/logs/proftpd
 # see https://bugs.launchpad.net/ubuntu/+source/proftpd-dfsg/+bug/1246245
 if [[ "$OS" = "Ubuntu" && "$VER" == "14.04" ]]; then
    sed -i 's|\([ \t]*start-stop-daemon --stop --signal $SIGNAL \)\(--quiet --pidfile "$PIDFILE"\)$|\1--retry 1 \2|' /etc/init.d/proftpd
-elif [[ "$OS" = "Ubuntu" && "$VER" == "16.04" ]]; then
+elif [[ "$OS" = "Ubuntu" && "$VER" == "18.04" ]]; then
 	systemctl start proftpd.service
 	systemctl start proftpd.service
 fi
@@ -1545,8 +1545,8 @@ read -e -p "Do you want to update phpMyAdmin and/or Roundcube to a newer version
 			if [[ "$OS" = "CentOs" || "$OS" = "Fedora" ]]; then
 				$PACKAGE_INSTALLER composer
 			elif [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
-				if [[ "$VER" != "16.04" ]]; then
-					$PACKAGE_INSTALLER php5-cli
+				if [[ "$VER" != "18.04" ]]; then
+					$PACKAGE_INSTALLER php5.6-cli
 				fi
 				$PACKAGE_INSTALLER curl git
 				curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
@@ -1656,7 +1656,7 @@ if [[ "$update_apps" == "1" ]]; then
 					cd webmail
 					if [[ "$OS" = "CentOs" || "$OS" = "Fedora" ]]; then
 						echo 'suhosin.session.encrypt=disabled' >> $PHP_EXT_PATH/suhosin.ini
-					elif [[ "$OS" = "Ubuntu" && "$VER" = "16.04" ]]; then
+					elif [[ "$OS" = "Ubuntu" && "$VER" = "18.04" ]]; then
 						echo 'suhosin.session.encrypt=disabled' >> $PHP_EXT_PATH/suhosin.ini
 						ln -s $PHP_EXT_PATH/suhosin.ini $PHP_EXT_LINK/suhosin.ini
 					fi
