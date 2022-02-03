@@ -1289,7 +1289,7 @@ if [[ "$OS" = "CentOs" || "$OS" = "Fedora" || "$OS" = "debian" || ( "$OS" = "Ubu
     fi
 
 	while true; do
-	if [[ "$(versioncheck "$phpver")" < "$(versioncheck "7.0.0")" ]]; then
+	if [[ "$(versioncheck "$phpver")" < "$(versioncheck "5.6")" ]]; then
 		read -e -p "Do you want to install Suhosin from the Sentora (O)riginal version or the (l)ast stable version? (O/L)" suh
 	else
 		echo -e "-- Your current php Version installed is $phpver."
