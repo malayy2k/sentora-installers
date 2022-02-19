@@ -1305,7 +1305,7 @@ if [[ "$OS" = "CentOs" || "$OS" = "Fedora" || "$OS" = "debian" || ( "$OS" = "Ubu
 			break;;
 			[Ll]* ) 
 				SUHOSIN_VERSION="0.9.38"
-				wget -nv -O suhosin.zip https://codeload.github.com/sektioneins/suhosin/zip/refs/tags/$SUHOSIN_VERSION.zip	
+				wget -nv -O suhosin.zip https://github.com/sektioneins/suhosin/archive/$SUHOSIN_VERSION.zip	
 			break;;
 			[Aa]* )
 				SUHOSIN_VERSION="master"
